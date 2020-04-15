@@ -12,6 +12,7 @@ PAUSE_MUSIC_KEYWORDS = ['pause', 'paws', 'paul\'s']
 volume = 50
 speech_rate = 100
 
+
 def process_input(query: str, wake_word=True, quiet_mode=False):
     cmd = query.split("_")
     if wake_word:
