@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+#
+#  jarvis-web:      jarvis-web will not be containerized as of now because of audio
+#    build: ./web   drivers and playback
+#    ports:
+#    - '5000:8080'
+#    environment:
+#      MONGO_ROOT_USER: 'admin'
+#      MONGO_ROOT_PSWD: 'aiwilltakeover'
+#      MONGO_HOST: 'mongodb'
+
+  mongodb:
+    image: library/mongo:latest
+    restart: always
+    volumes:
+    - './data/mongodb:/data/db'  # make sure this is correct
+    expose:
+      - 27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: aiwilltakeover # TODO fix auth
