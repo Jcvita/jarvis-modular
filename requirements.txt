@@ -1,3 +1,0 @@
-Flask~=1.0.2
-pyttsx3~=2.87
-spotipy~=2.11.1

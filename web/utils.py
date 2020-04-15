@@ -1,6 +1,7 @@
 import pyttsx3
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
+import time
 from flask import make_response
 
 sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
@@ -9,7 +10,7 @@ PLAY_MUSIC_KEYWORDS = ['play', 'pay', 'listen']
 PAUSE_MUSIC_KEYWORDS = ['pause', 'paws', 'paul\'s']
 
 volume = 50
-
+speech_rate = 100
 
 def process_input(query: str, wake_word=True, quiet_mode=False):
     cmd = query.split("_")
@@ -27,13 +28,17 @@ def process_input(query: str, wake_word=True, quiet_mode=False):
                         return change_volume(int(word), quiet_mode)
                 else:
                     continue
-        if cmd[1] == 'alarm':
-            if cmd[2] == 'for' or cmd[2] == 'at':
-                pass  # TODO set an action to happen at a certain datetime object (maybe create a thread)
-            if cmd[2] == 'sound':
-                pass  # TODO store a variable somewhere of a sound
-    if cmd[0] == 'remove' or cmd[0] == 'delete':
-
+        if cmd[1] == 'speech' or cmd[1] == 'speaking':
+            for word in cmd:
+                if word.isnumeric():
+                    if int(word) > 300:
+                        return change_speech_rate(300, quiet_mode)
+                    elif int(word) < 50:
+                        return change_speech_rate(50, quiet_mode)
+                    else:
+                        return change_speech_rate(int(word), quiet_mode)
+                else:
+                    continue
     if cmd[0] in PLAY_MUSIC_KEYWORDS:
         pass
     return make_response('Didn\'t understand arguments\n', 200)
@@ -43,20 +48,29 @@ def change_volume(vol: int, quiet_mode: bool):
     global volume
     volume = vol
     if not quiet_mode:
-        speak(f'Set volume to {volume}')
+        speak(f'.set volume to {volume}')
     return make_response(f'Successfully changed volume to {volume}', 200)
+
+
+def change_speech_rate(rate: int, quiet_mode: bool):
+    global speech_rate
+    speech_rate = rate
+    if not quiet_mode:
+        speak(f'.set speech rate to {speech_rate}')
+    return make_response(f'Successfully changed speech rate to {speech_rate}', 200)
 
 
 def speak(text):
     engine = pyttsx3.init()
     engine.setProperty('volume', volume / 100)
+    time.sleep(1)
     engine.say(text)
     engine.runAndWait()
     engine.stop()
 
 
 def song_title_to_uri(title, artist):
-    spotipy.Spotify.s
+    pass
 
 
 def play_song_with_spotify(uris: list):
