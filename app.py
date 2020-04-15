@@ -1,9 +1,5 @@
-from flask import Flask, request, render_template
+from flask import Flask, request
 import utils
-import socketserver
-import threading
-import logging
-import time
 
 app = Flask(__name__)
 
